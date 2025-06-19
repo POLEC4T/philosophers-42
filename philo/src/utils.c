@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:02:08 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/16 13:26:48 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/19 12:07:00 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,59 +14,64 @@
 
 bool	is_philo_dead(t_philo *philo)
 {
-	if (timeval_to_ms(philo->last_meal_time) == -1)
+	if (philo->last_meal_time.tv_usec == -1000)
 		return (false);
 	if (get_elapsed_time_ms(philo->last_meal_time) >= philo->ctx->time_to_die)
+	{
+		philo->is_dead = true;
 		return (true);
+	}
 	return (false);
 }
 
 int	my_sleep(t_philo *philo, time_t ms_to_sleep, t_philo_state philo_state)
 {
-	struct timeval	start_time;
-	time_t			elapsed_time;
+	struct timeval	start_time_val;
 
-	gettimeofday(&start_time, NULL);
-	while (1)
+	gettimeofday(&start_time_val, NULL);
+	while (get_elapsed_time_ms(start_time_val) < ms_to_sleep)
 	{
-		elapsed_time = get_elapsed_time_ms(start_time);
 		if (philo_state != EATING)
 		{
-			philo->is_dead = is_philo_dead(philo);
-			if (philo->is_dead)
+			if (is_philo_dead(philo))
 				return (SOMEBODY_DIED);
 		}
-		if (get_somebody_died(philo->ctx))
-			return (SOMEBODY_DIED);
-		if (elapsed_time >= ms_to_sleep)
-			break ;
 		usleep(100);
 	}
 	return (EXIT_SUCCESS);
 }
 
-/**
- * @returns true if a philosopher has died, false otherwise.
- * Done to avoid deadlock when checking if a philosopher has died.
- */
-bool	get_somebody_died(t_context *ctx)
-{
-	pthread_mutex_lock(ctx->somebody_died_lock);
-	if (ctx->somebody_died)
-	{
-		pthread_mutex_unlock(ctx->somebody_died_lock);
-		return (true);
-	}
-	pthread_mutex_unlock(ctx->somebody_died_lock);
-	return (false);
-}
+// int	my_sleep(t_philo *philo, time_t ms_to_sleep, t_philo_state philo_state)
+// {
+// 	struct timeval	start_time_val;
+// 	time_t			time_before_dead;
 
-/**
- * @brief Sets the state of somebody_died in the context to true
- */
-void	set_somebody_died_true(t_context *ctx)
-{
-	pthread_mutex_lock(ctx->somebody_died_lock);
-	ctx->somebody_died = true;
-	pthread_mutex_unlock(ctx->somebody_died_lock);
-}
+// 	(void)philo_state;
+// 	gettimeofday(&start_time_val, NULL);
+// 	if (philo->last_meal_time.tv_usec == -1000)
+// 	{
+// 		time_before_dead = philo->ctx->time_to_die;
+// 	}
+// 	else
+// 	{
+// 		time_before_dead = timeval_to_ms(philo->last_meal_time)
+// 			+ philo->ctx->time_to_die - timeval_to_ms(start_time_val);
+// 	}
+// 	if (time_before_dead < ms_to_sleep && philo_state != EATING)
+// 	{
+// 		while (get_elapsed_time_ms(start_time_val) < time_before_dead)
+// 		{
+// 			usleep(100);
+// 		}
+// 		philo->is_dead = true;
+// 		return (SOMEBODY_DIED);
+// 	}
+// 	else
+// 	{
+// 		while (get_elapsed_time_ms(start_time_val) < ms_to_sleep)
+// 		{
+// 			usleep(100);
+// 		}
+// 	}
+// 	return (EXIT_SUCCESS);
+// }

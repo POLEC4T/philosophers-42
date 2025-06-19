@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:02:53 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/16 13:11:36 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/19 14:17:57 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ typedef struct s_context
 	t_fork				**forks;
 	struct timeval		start_time;
 	bool				somebody_died;
-	pthread_mutex_t		*somebody_died_lock;
 }						t_context;
 
 int						ft_atoi(const char *nptr);
@@ -86,7 +85,7 @@ void					free_all(t_context *ctx, t_philo *philos);
 
 // main_thread
 int						start_threads(t_context *ctx, t_philo *philos);
-int						join_threads(t_context *ctx, t_philo *philos);
+void					join_threads(t_context *ctx, t_philo *philos);
 void					loop_check_threads(t_context *ctx, t_philo *philos);
 
 // time
@@ -94,11 +93,13 @@ time_t					timeval_to_ms(struct timeval time);
 time_t					get_elapsed_time_ms(struct timeval start);
 
 // utils
-bool					get_somebody_died(t_context *ctx);
-void					set_somebody_died_true(t_context *ctx);
 int						my_sleep(t_philo *philo, time_t ms_to_sleep,
 							t_philo_state philo_state);
-bool						is_philo_dead(t_philo *philo);
+bool					is_philo_dead(t_philo *philo);
+
+// forks
+int						lock_forks(t_philo *philo);
+void					release_forks(t_philo *philo);
 
 // prints
 void					print_lock_mutex(t_print_type print_type,

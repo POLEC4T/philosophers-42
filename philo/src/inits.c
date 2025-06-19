@@ -6,26 +6,11 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:33:59 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/16 13:10:29 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/19 12:00:34 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
-
-static void	clean_init_ctx(t_context *ctx)
-{
-	ctx->num_philos = -2;
-	ctx->time_to_die = -2;
-	ctx->time_to_eat = -2;
-	ctx->time_to_sleep = -2;
-	ctx->max_meals = -2;
-	ctx->forks = NULL;
-	ctx->start_time.tv_sec = 0;
-	ctx->start_time.tv_usec = 0;
-	ctx->somebody_died = false;
-	ctx->somebody_died_lock = NULL;
-	ctx->print_lock = NULL;
-}
 
 static int	init_forks(t_context *ctx)
 {
@@ -55,7 +40,7 @@ static int	init_forks(t_context *ctx)
 	return (EXIT_SUCCESS);
 }
 
-static int init_mutex(pthread_mutex_t **mutex_ptr)
+static int	init_mutex(pthread_mutex_t **mutex_ptr)
 {
 	*mutex_ptr = malloc(sizeof(pthread_mutex_t));
 	if (*mutex_ptr == NULL)
@@ -71,13 +56,17 @@ static int init_mutex(pthread_mutex_t **mutex_ptr)
 
 static int	init_ctx(t_context *ctx, char **argv)
 {
+	ctx->forks = NULL;
+	ctx->print_lock = NULL;
+	ctx->somebody_died = false;
+	ctx->max_meals = -2;
 	ctx->num_philos = ft_atoi(argv[1]);
 	ctx->time_to_die = ft_atoi(argv[2]);
 	ctx->time_to_eat = ft_atoi(argv[3]);
 	ctx->time_to_sleep = ft_atoi(argv[4]);
 	if (argv[5])
 		ctx->max_meals = ft_atoi(argv[5]);
-	if (ctx->num_philos <= 1 || ctx->time_to_die <= 0 || ctx->time_to_eat <= 0
+	if (ctx->num_philos <= 0 || ctx->time_to_die <= 0 || ctx->time_to_eat <= 0
 		|| ctx->time_to_sleep <= 0 || (argv[5] && ctx->max_meals <= 0))
 	{
 		return (return_write_error("Invalid arguments\n"));
@@ -86,8 +75,6 @@ static int	init_ctx(t_context *ctx, char **argv)
 	if (init_forks(ctx) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (init_mutex(&ctx->print_lock) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (init_mutex(&ctx->somebody_died_lock) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -116,7 +103,6 @@ static int	init_philos(t_context *ctx, t_philo **philos_ptr)
 
 int	init_all(t_context *ctx, t_philo **philos_ptr, char **argv)
 {
-	clean_init_ctx(ctx);
 	*philos_ptr = NULL;
 	if (init_ctx(ctx, argv) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
