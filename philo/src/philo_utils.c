@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:02:08 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/23 10:16:18 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/23 10:35:39 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	is_philo_dead(t_philo *philo)
 }
 
 /**
- * @brief make the thread "wait" ms_to_sleep while checking if the philo is dead
+ * @brief make the thread "wait" ms_to_sleep while checking if anybody died
  */
 int	my_wait(t_philo *philo, time_t ms_to_sleep, t_philo_state philo_state)
 {
@@ -32,8 +32,7 @@ int	my_wait(t_philo *philo, time_t ms_to_sleep, t_philo_state philo_state)
 	gettimeofday(&func_start_time, NULL);
 	while (get_elapsed_time_ms(func_start_time) < ms_to_sleep)
 	{
-		if (philo_state != EATING &&
-			(is_philo_dead(philo) || philo->ctx->somebody_died))
+		if (philo_state != EATING && is_philo_dead(philo))
 			return (SOMEBODY_DIED);
 		usleep(100);
 	}

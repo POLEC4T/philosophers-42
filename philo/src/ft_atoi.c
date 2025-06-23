@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:58:03 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/23 10:13:11 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/23 10:26:31 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_atoi(char *nptr)
 	int				i;
 	int				sign;
 	unsigned long	res;
-	int len;
+	int				len;
 
 	i = 0;
 	sign = 1;

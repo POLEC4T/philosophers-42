@@ -6,15 +6,11 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:02:12 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/23 10:19:49 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/23 10:23:59 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philos.h"
-
-void	process_philo(t_context *ctx, t_philo *philos)
-{
-}
 
 int	main(int argc, char **argv)
 {
