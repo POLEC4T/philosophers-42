@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 13:33:59 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/19 12:00:34 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/23 09:55:50 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static int	init_philos(t_context *ctx, t_philo **philos_ptr)
 		(*philos_ptr)[i].id = i + 1;
 		(*philos_ptr)[i].thread = 0;
 		(*philos_ptr)[i].ctx = ctx;
-		(*philos_ptr)[i].last_meal_time = (struct timeval){0, -1000};
+		(*philos_ptr)[i].last_meal_time = ctx->start_time;
 		(*philos_ptr)[i].num_meals_eaten = 0;
 		(*philos_ptr)[i].is_dead = false;
 		(*philos_ptr)[i].left_fork = ctx->forks[i];

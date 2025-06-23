@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 10:02:53 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/19 14:17:57 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/23 10:14:23 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@
 # define USAGE_STR \
 	"Usage: ./philosophers num_philos time_to_die time_to_eat \
 time_to_sleep [max_meals]\n"
+# define END_COLOR "\e[0m"
+# define GREEN "\e[0;32m"
+# define VIOLET "\e[0;35m"
+# define ORANGE "\e[0;33m"
+# define RED "\e[0;31m"
 
 typedef enum e_print_type
 {
@@ -39,7 +44,7 @@ typedef enum e_philo_state
 {
 	EATING,
 	SLEEPING,
-	THINKING,
+	WAITING,
 }						t_philo_state;
 
 typedef struct fork
@@ -63,9 +68,9 @@ typedef struct s_philo
 typedef struct s_context
 {
 	int					num_philos;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
+	time_t				time_to_die;
+	time_t				time_to_eat;
+	time_t				time_to_sleep;
 	int					max_meals;
 	pthread_mutex_t		*print_lock;
 	t_fork				**forks;
@@ -73,6 +78,8 @@ typedef struct s_context
 	bool				somebody_died;
 }						t_context;
 
+// utils
+int						ft_strlen(char *str);
 int						ft_atoi(const char *nptr);
 
 void					philo_routine(t_philo *philo);
@@ -92,8 +99,8 @@ void					loop_check_threads(t_context *ctx, t_philo *philos);
 time_t					timeval_to_ms(struct timeval time);
 time_t					get_elapsed_time_ms(struct timeval start);
 
-// utils
-int						my_sleep(t_philo *philo, time_t ms_to_sleep,
+// philo utils
+int						my_wait(t_philo *philo, time_t ms_to_sleep,
 							t_philo_state philo_state);
 bool					is_philo_dead(t_philo *philo);
 
@@ -105,6 +112,6 @@ void					release_forks(t_philo *philo);
 void					print_lock_mutex(t_print_type print_type,
 							pthread_mutex_t *print_mutex, t_context *ctx,
 							int philo_id);
-int						return_write_error(const char *msg);
+int						return_write_error(char *msg);
 
 #endif

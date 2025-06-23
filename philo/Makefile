@@ -1,8 +1,9 @@
 NAME = philo
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread -g3
-SRC_FILES = main.c philos_threads.c utils.c ft_atoi.c inits.c \
-			main_thread.c free.c prints.c time.c forks.c
+SRC_FILES = main.c philos_threads.c philo_utils.c ft_atoi.c \
+			inits.c main_thread.c free.c prints.c time.c \
+			forks.c ft_strlen.c 
 RM = rm -f
 OBJ_DIR = .objs
 SRC_DIR = src

@@ -6,7 +6,7 @@
 /*   By: mniemaz <mniemaz@student.42lyon.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 19:29:29 by mniemaz           #+#    #+#             */
-/*   Updated: 2025/06/19 11:06:45 by mniemaz          ###   ########.fr       */
+/*   Updated: 2025/06/23 10:05:36 by mniemaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	lock_fork(t_philo *philo, t_fork *fork)
 {
 	while (fork->is_available == false)
 	{
-		if (is_philo_dead(philo))
+		if (is_philo_dead(philo) || philo->ctx->somebody_died)
 			return (SOMEBODY_DIED);
 		usleep(100);
 	}
@@ -40,7 +40,6 @@ static int	lock_fork(t_philo *philo, t_fork *fork)
 		philo->id);
 	return (EXIT_SUCCESS);
 }
-
 int	lock_forks(t_philo *philo)
 {
 	t_fork	*first_fork;
